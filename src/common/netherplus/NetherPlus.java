@@ -7,7 +7,6 @@ import java.util.logging.Level;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.PreInit;
@@ -17,17 +16,16 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
+import net.minecraft.src.BaseMod;
 import net.minecraft.src.Block;
 import net.minecraft.src.EnumArmorMaterial;
 import net.minecraft.src.EnumToolMaterial;
-import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.EnumHelper;
-import netherplus.*;
 
 /**
  * Base mod class for Nether+.
@@ -37,7 +35,7 @@ import netherplus.*;
 
 @Mod(modid = "NetherPlus", name = "Nether+", version = "0.9.1")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-public class NetherPlus implements IFuelHandler, IWorldGenerator {
+public class NetherPlus implements IFuelHandler {
 	
 	public static String netherPlusBlocks = "/NetherPlus/Block_Textures.png";
 	public static String netherPlusItems = "/NetherPlus/Item_Textures.png";
@@ -121,6 +119,10 @@ public class NetherPlus implements IFuelHandler, IWorldGenerator {
 		LanguageRegistry.instance().addStringLocalization("item.cast.waterburst2", "en_US", "Selected Spell: Water Burst II");
 	    
 		LanguageRegistry.instance().addStringLocalization("container.synthesizer", "en_US", "Crystal Synthesizer");
+		
+		GameRegistry.registerWorldGenerator(new NetherGenerator());
+		
+		GameRegistry.registerFuelHandler(this);
 	}
 	
 	//Adds blocks
@@ -270,66 +272,6 @@ public class NetherPlus implements IFuelHandler, IWorldGenerator {
 		NetherPlusCore.addRecipe(new ItemStack(Block.torchWood, 4), new Object[] {"C", "S", Character.valueOf('S'), Item.stick, Character.valueOf('C'), netherCoal});
 	}
 	
-	@Override
-	public void generate(Random rand, int chunkX, int chunkZ, World world,
-			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        for(int i = 0; i < 3; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(96);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new WorldGenMinable(oreBlackDiamond.blockID, 4)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-        for(int i = 0; i < 2; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(96);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new WorldGenMinable(oreMolten.blockID, 4)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-        for(int i = 0; i < 7; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(96);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new WorldGenMinable(oreNetheridium.blockID, 7)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-        for(int i = 0; i < 10; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(96);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new WorldGenMinable(oreNetherCoal.blockID, 8)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-        /*
-        for(int i = 0; i < 5; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(96);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new NPGenMinable(oreFieryCrystal.blockID, 3)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-        for(int i = 0; i < 5; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(96);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new NPGenMinable(oreDarkCrystal.blockID, 3)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-        */
-	}
-	/*
-	public void generateSurface(World world, Random rand, int chunkX, int chunkZ) {
-        for(int i = 0; i < 7; i++)
-        {
-            int randPosX = chunkX + rand.nextInt(16);
-            int randPosY = rand.nextInt(32);
-            int randPosZ = chunkZ + rand.nextInt(16);
-            (new NPGenMinable(oreWaterCrystal.blockID, 3)).generate(world, rand, randPosX, randPosY, randPosZ);
-        }
-	}
-	*/
-	
 	public int getBlockID(Configuration cfg, String name, int defaultID) {
 		if(cfg == null) {
 			return defaultID;
@@ -359,7 +301,6 @@ public class NetherPlus implements IFuelHandler, IWorldGenerator {
 			}
 		}
 	}
-
 
 	@Override
 	public int getBurnTime(ItemStack fuel) {
