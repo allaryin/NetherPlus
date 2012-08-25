@@ -36,10 +36,10 @@ import net.minecraftforge.common.EnumHelper;
 
 @Mod(modid = "NetherPlus", name = "Nether+", version = "0.9.1")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-public class NetherPlus implements IFuelHandler {
+public class NetherPlus {
 	
-	public static String netherPlusBlocks = "/NetherPlus/Block_Textures.png";
-	public static String netherPlusItems = "/NetherPlus/Item_Textures.png";
+	public static String netherPlusBlocks = "/netherplus/Block_Textures.png";
+	public static String netherPlusItems = "/netherplus/Item_Textures.png";
 	
 	/*public static Block oreDarkCrystal;
 	public static Block oreFieryCrystal;
@@ -126,7 +126,7 @@ public class NetherPlus implements IFuelHandler {
 		
 		GameRegistry.registerWorldGenerator(new NetherGenerator());
 		
-		GameRegistry.registerFuelHandler(this);
+		GameRegistry.registerFuelHandler(new FuelHandler());
 	}
 	
 	//Adds blocks
@@ -218,6 +218,7 @@ public class NetherPlus implements IFuelHandler {
 		NetherPlusCore.addName(bookSpellFlame, "Flame Spellbook");
 		NetherPlusCore.addName(itemMagicStaff, "Staff");*/
 		NetherPlusCore.addName(blackDiamond, "Black Diamond");
+		NetherPlusCore.addName(netherCoal, "Nether Coal");
 		NetherPlusCore.addName(ingotNetheridium, "Netheridium Ingot");
 		NetherPlusCore.addName(ingotMolten, "Molten Ingot");
 		NetherPlusCore.addName(pickNetheridium, "Netheridium Pickaxe");
@@ -304,13 +305,5 @@ public class NetherPlus implements IFuelHandler {
 				return defaultID;
 			}
 		}
-	}
-
-	@Override
-	public int getBurnTime(ItemStack fuel) {
-		if(fuel == new ItemStack(netherCoal)) {
-			return 1600;
-		}
-		return 0;
 	}
 }
