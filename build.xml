@@ -1,0 +1,51 @@
+<project name="NetherPlus" basedir="../" default="main">
+
+    <!-- Properties -->
+    
+    <property name="build.dir"           value="build"/>
+    <property name="src.dir"             value="src"/>
+    <property name="build.dir"           value="build"/>
+    <property name="classes.dir"         value="${build.dir}/classes"/>
+    <property name="jar.dir"             value="${build.dir}/dist"/>
+    <property name="reobf.dir"           value="reobf"/>
+    <property name="nether.version"      value="0.9.1"/>
+    
+    <echo message="Starting build for NetherPlus"/>
+    
+    <!-- Clean Directories -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="compile" depends="clean">
+
+        <!-- Recompile -->
+        <exec executable="cmd">
+            <arg line="/c recompile.bat"/>
+        </exec>
+        
+        <!-- Reobfuscate -->
+        <exec executable="cmd">
+            <arg line="/c reobfuscate.bat"/>
+        </exec>
+        
+        <!-- Copy classes -->
+        <copy todir="${classes.dir}">
+            <fileset dir="${reobf.dir}/minecraft"/>
+        </copy>
+        
+        <!-- Copy resources -->
+        <copy todir="${classes.dir}">
+            <fileset dir="${src.dir}/resources"/>
+        </copy>
+    </target>
+    
+    <target name="package" depends="compile">
+        
+        <jar destfile="${jar.dir}/NetherPlus-Universal-${nether.version}.jar" basedir="${classes.dir}"/>
+        
+    </target>
+    
+    <target name="main" depends="package"/>
+
+</project>
