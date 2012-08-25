@@ -48,6 +48,6 @@ public class BlockOre extends Block
     
     public String getTextureFile()
     {
-        return "/NetherPlus/Block_Textures.png";
+        return "/netherplus/Block_Textures.png";
     }
 }

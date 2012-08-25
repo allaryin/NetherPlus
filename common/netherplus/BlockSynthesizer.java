@@ -158,7 +158,7 @@ public class BlockSynthesizer extends BlockContainer {
 	
     public String getTextureFile()
     {
-        return "/NetherPlus/Block_Textures.png";
+        return "/netherplus/Block_Textures.png";
     }
 
 	@Override

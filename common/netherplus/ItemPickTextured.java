@@ -14,6 +14,6 @@ public class ItemPickTextured extends ItemPickaxe {
     }
     
 	public String getTextureFile() {
-		return "/NetherPlus/Item_Textures.png";
+		return "/netherplus/Item_Textures.png";
 	}
 }

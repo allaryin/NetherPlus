@@ -12,6 +12,6 @@ public class ItemSpadeTextured extends ItemSpade {
     }
     
 	public String getTextureFile() {
-		return "/NetherPlus/Item_Textures.png";
+		return "/netherplus/Item_Textures.png";
 	}
 }
