@@ -206,10 +206,10 @@ public class NetherPlus {
 		swordBlackDiamond = new ItemSwordTextured(getItemID(cfg, "swordBlackDiamond", 5017), T_BLACK_DIAMOND).setIconCoord(13, 2).setItemName("swordBlackDiamond");
 		swordMolten = new ItemSwordTextured(getItemID(cfg, "swordMolten", 5018), T_MOLTEN).setIconCoord(14, 2).setItemName("swordMolten");
 		
-		helmBlackDiamond = new ItemArmorTextured(getItemID(cfg, "helmBlackDiamond", 5019), A_BLACK_DIAMOND, ModLoader.addArmor("blackdiamond"), 0).setIconCoord(0, 4).setItemName("helmBlackDiamond");
-		chestBlackDiamond = new ItemArmorTextured(getItemID(cfg, "chestBlackDiamond", 5020), A_BLACK_DIAMOND, ModLoader.addArmor("blackdiamond"), 1).setIconCoord(1, 4).setItemName("chestBlackDiamond");
-		pantsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "pantsBlackDiamond", 5021), A_BLACK_DIAMOND, ModLoader.addArmor("blackdiamond"), 2).setIconCoord(2, 4).setItemName("pantsBlackDiamond");
-		bootsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "bootsBlackDiamond", 5022), A_BLACK_DIAMOND, ModLoader.addArmor("blackdiamond"), 3).setIconCoord(3, 4).setItemName("bootsBlackDiamond");
+		helmBlackDiamond = new ItemArmorTextured(getItemID(cfg, "helmBlackDiamond", 5019), A_BLACK_DIAMOND, 22, 0).setIconCoord(0, 4).setItemName("helmBlackDiamond");
+		chestBlackDiamond = new ItemArmorTextured(getItemID(cfg, "chestBlackDiamond", 5020), A_BLACK_DIAMOND, 22, 1).setIconCoord(1, 4).setItemName("chestBlackDiamond");
+		pantsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "pantsBlackDiamond", 5021), A_BLACK_DIAMOND, 22, 2).setIconCoord(2, 4).setItemName("pantsBlackDiamond");
+		bootsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "bootsBlackDiamond", 5022), A_BLACK_DIAMOND, 22, 3).setIconCoord(3, 4).setItemName("bootsBlackDiamond");
 		cfg.save();
 		
 		/*NetherPlusCore.addName(crystalDark, "Dark Crystal");
