@@ -174,6 +174,8 @@ public class NetherPlus {
 	//Adds blocks
 	private void initItems(Configuration cfg) {
 		
+		int blackDiamondRenderID = proxy.registerArmorRenderID("/netherplus/blackdiamond_");
+		
 		A_BLACK_DIAMOND = EnumHelper.addArmorMaterial("BLACK_DIAMOND", 23, new int[]{3, 7, 5, 2}, 11);
 		T_BLACK_DIAMOND = EnumHelper.addToolMaterial("BLACK_DIAMOND", 3, 1456, 8.0F, 3, 8);
 		T_NETHERIDIUM = EnumHelper.addToolMaterial("NETHERIDIUM", 2, 300, 6.0F, 2, 14);
@@ -206,10 +208,10 @@ public class NetherPlus {
 		swordBlackDiamond = new ItemSwordTextured(getItemID(cfg, "swordBlackDiamond", 5017), T_BLACK_DIAMOND).setIconCoord(13, 2).setItemName("swordBlackDiamond");
 		swordMolten = new ItemSwordTextured(getItemID(cfg, "swordMolten", 5018), T_MOLTEN).setIconCoord(14, 2).setItemName("swordMolten");
 		
-		helmBlackDiamond = new ItemArmorTextured(getItemID(cfg, "helmBlackDiamond", 5019), A_BLACK_DIAMOND, 22, 0).setIconCoord(0, 4).setItemName("helmBlackDiamond");
-		chestBlackDiamond = new ItemArmorTextured(getItemID(cfg, "chestBlackDiamond", 5020), A_BLACK_DIAMOND, 22, 1).setIconCoord(1, 4).setItemName("chestBlackDiamond");
-		pantsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "pantsBlackDiamond", 5021), A_BLACK_DIAMOND, 22, 2).setIconCoord(2, 4).setItemName("pantsBlackDiamond");
-		bootsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "bootsBlackDiamond", 5022), A_BLACK_DIAMOND, 22, 3).setIconCoord(3, 4).setItemName("bootsBlackDiamond");
+		helmBlackDiamond = new ItemArmorTextured(getItemID(cfg, "helmBlackDiamond", 5019), A_BLACK_DIAMOND, blackDiamondRenderID, 0).setIconCoord(0, 4).setItemName("helmBlackDiamond");
+		chestBlackDiamond = new ItemArmorTextured(getItemID(cfg, "chestBlackDiamond", 5020), A_BLACK_DIAMOND, blackDiamondRenderID, 1).setIconCoord(1, 4).setItemName("chestBlackDiamond");
+		pantsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "pantsBlackDiamond", 5021), A_BLACK_DIAMOND, blackDiamondRenderID, 2).setIconCoord(2, 4).setItemName("pantsBlackDiamond");
+		bootsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "bootsBlackDiamond", 5022), A_BLACK_DIAMOND, blackDiamondRenderID, 3).setIconCoord(3, 4).setItemName("bootsBlackDiamond");
 		cfg.save();
 		
 		/*NetherPlusCore.addName(crystalDark, "Dark Crystal");
