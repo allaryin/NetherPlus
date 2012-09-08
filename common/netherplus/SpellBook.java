@@ -13,7 +13,7 @@ public class SpellBook extends ItemTextured {
 	
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-    	//ModLoader.openGUI(entityplayer, new GuiSpellbook());
+    	entityplayer.openGui(NetherPlus.instance, 40, world, entityplayer.serverPosX, entityplayer.serverPosY, entityplayer.serverPosZ);
         return itemstack;
     }
 

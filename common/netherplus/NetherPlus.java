@@ -9,11 +9,13 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -34,30 +36,30 @@ import net.minecraftforge.common.EnumHelper;
  * @author Joe12o
  */
 
-@Mod(modid = "NetherPlus", name = "Nether+", version = "0.9.1")
+@Mod(modid = "NetherPlus", name = "Nether+", version = "1.0.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class NetherPlus {
 	
 	public static String netherPlusBlocks = "/netherplus/Block_Textures.png";
 	public static String netherPlusItems = "/netherplus/Item_Textures.png";
 	
-	/*public static Block oreDarkCrystal;
+	public static Block oreDarkCrystal;
 	public static Block oreFieryCrystal;
-	public static Block oreWaterCrystal;*/
+	public static Block oreWaterCrystal;
 	public static Block oreBlackDiamond;
 	public static Block oreNetherCoal;
 	public static Block oreNetheridium;
 	public static Block oreMolten;
-	//public static Block blockSynthesizer;
-	//public static Block soulChest;
+	public static Block blockSynthesizer;
+	public static Block soulChest;
 	
-	/*public static Item crystalDark;
+	public static Item crystalDark;
 	public static Item crystalFiery;
 	public static Item crystalFiery2;
 	public static Item crystalWater;
 	public static Item staff;
 	public static Item bookSpellFlame;
-	public static Item itemMagicStaff;*/
+	public static Item itemMagicStaff;
 	public static Item blackDiamond;
 	public static Item netherCoal;
 	public static Item ingotNetheridium;
@@ -88,21 +90,25 @@ public class NetherPlus {
 	public static EnumToolMaterial T_NETHERIDIUM;
 	public static EnumToolMaterial T_MOLTEN;
 	
+	private Configuration configuration;
+	
 	@SidedProxy(clientSide = "netherplus.ClientProxy", serverSide = "netherplus.CommonProxy")
 	public static CommonProxy proxy;
+	@Instance
+	public static NetherPlus instance;
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
 		try {
-			Configuration configuration = new Configuration(event.getSuggestedConfigurationFile());
+			configuration = new Configuration(event.getSuggestedConfigurationFile());
 			configuration.load();
 			System.out.println("Nether+ configuration loaded successfully.");
-			initBlocks(configuration);
-			initItems(configuration);
 		}
 		catch(Exception exception) {
 			FMLLog.log(Level.WARNING, exception, "Error while trying to access the Nether+ configuration!");
 		}
+		initBlocks(configuration);
+		initItems(configuration);
 	}
 	
 	@Init
@@ -110,7 +116,7 @@ public class NetherPlus {
 		proxy.preloadTexture(netherPlusBlocks);
 		proxy.preloadTexture(netherPlusItems);
 		
-		//registerEntities();
+		registerEntities();
 		initRecipes();
 		
 		LanguageRegistry.instance().addStringLocalization("item.cast.fireblast", "en_US", "Selected Spell: Fire Blast I");
@@ -125,53 +131,53 @@ public class NetherPlus {
 		LanguageRegistry.instance().addStringLocalization("container.synthesizer", "en_US", "Crystal Synthesizer");
 		
 		GameRegistry.registerWorldGenerator(new NetherGenerator());
-		
 		GameRegistry.registerFuelHandler(new FuelHandler());
+		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 	}
 	
 	//Adds blocks
 	private void initBlocks(Configuration cfg) {
-		/*
-		oreDarkCrystal = new NPBlockOre(NPConfig.oreDarkCrystalID, 0).setHardness(0.8F).setResistance(5.0F).setBlockName("oreDarkCrystal");
-		oreFieryCrystal = new NPBlockOre(NPConfig.oreFieryCrystalID, 1).setHardness(0.9F).setResistance(5.0F).setBlockName("oreFieryCrystal");
-		oreWaterCrystal = new NPBlockOre(NPConfig.oreWaterCrystalID, 2).setHardness(0.9F).setResistance(5.0F).setBlockName("oreWaterCrystal");*/
+		
+		oreDarkCrystal = new BlockOre(getBlockID(cfg, "oreDarkCrystal", 204), 0).setHardness(0.8F).setResistance(5.0F).setBlockName("oreDarkCrystal");
+		oreFieryCrystal = new BlockOre(getBlockID(cfg, "oreFieryCrystal", 205), 1).setHardness(0.9F).setResistance(5.0F).setBlockName("oreFieryCrystal");
+		oreWaterCrystal = new BlockOre(getBlockID(cfg, "oreWaterCrystal", 206), 2).setHardness(0.9F).setResistance(5.0F).setBlockName("oreWaterCrystal");
 		oreBlackDiamond = new BlockOre(getBlockID(cfg, "oreBlackDiamond", 200), 3).setHardness(0.8F).setResistance(5.0F).setBlockName("oreBlackDiamond");
 		oreNetherCoal = new BlockOre(getBlockID(cfg, "oreNetherCoal", 201), 4).setHardness(0.8F).setResistance(5.0F).setBlockName("oreNetherCoal");
 		oreNetheridium = new BlockOre(getBlockID(cfg, "oreNetheridium", 202), 5).setHardness(0.8F).setResistance(5.0F).setBlockName("oreNetheridium");
 		oreMolten = new BlockOre(getBlockID(cfg, "oreMolten", 203), 6).setHardness(0.8F).setResistance(5.0F).setBlockName("oreMolten");
-		//blockSynthesizer = new NPBlockSynthesizer(NPConfig.blockSynthesizerID, 16).setHardness(1.0F).setResistance(5.0F).setBlockName("blockUpgrader");
+		blockSynthesizer = new BlockSynthesizer(getBlockID(cfg, "crystalSynthesizer", 207), 16).setHardness(1.0F).setResistance(5.0F).setBlockName("blockUpgrader");
 		cfg.save();
 		
 		
-		/*NetherPlusCore.addName(oreDarkCrystal, "Dark Crystal Ore");
+		NetherPlusCore.addName(oreDarkCrystal, "Dark Crystal Ore");
 		NetherPlusCore.addName(oreFieryCrystal, "Fiery Crystal Ore");
-		NetherPlusCore.addName(oreWaterCrystal, "Water Crystal Ore");*/
+		NetherPlusCore.addName(oreWaterCrystal, "Water Crystal Ore");
 		NetherPlusCore.addName(oreBlackDiamond, "Black Diamond Ore");
 		NetherPlusCore.addName(oreNetherCoal, "Nethercoal Ore");
 		NetherPlusCore.addName(oreNetheridium, "Netheridium Ore");
 		NetherPlusCore.addName(oreMolten, "Molten Ore");
-		//NetherPlusCore.addName(blockSynthesizer, "Crystal Synthesizer");
+		NetherPlusCore.addName(blockSynthesizer, "Crystal Synthesizer");
 		
-		//GameRegistry.registerBlock(oreDarkCrystal);
-		//GameRegistry.registerBlock(oreFieryCrystal);
-		//GameRegistry.registerBlock(oreWaterCrystal);
+		GameRegistry.registerBlock(oreDarkCrystal);
+		GameRegistry.registerBlock(oreFieryCrystal);
+		GameRegistry.registerBlock(oreWaterCrystal);
 		GameRegistry.registerBlock(oreBlackDiamond);
 		GameRegistry.registerBlock(oreNetherCoal);
 		GameRegistry.registerBlock(oreNetheridium);
 		GameRegistry.registerBlock(oreMolten);
-		//GameRegistry.registerBlock(blockSynthesizer);
+		GameRegistry.registerBlock(blockSynthesizer);
 		
 		NetherPlusCore.setBlockHarvestLevel(oreBlackDiamond, "pickaxe", 2);
 		NetherPlusCore.setBlockHarvestLevel(oreMolten, "pickaxe", 3);
 		NetherPlusCore.setBlockHarvestLevel(oreNetherCoal, "pickaxe", 0);
 		NetherPlusCore.setBlockHarvestLevel(oreNetheridium, "pickaxe", 1);
 		
-		/*NetherPlusCore.setBlockHarvestLevel(oreFieryCrystal, "pickaxe", 2);
+		NetherPlusCore.setBlockHarvestLevel(oreFieryCrystal, "pickaxe", 2);
 		NetherPlusCore.setBlockHarvestLevel(oreWaterCrystal, "pickaxe", 2);
-		NetherPlusCore.setBlockHarvestLevel(oreDarkCrystal, "pickaxe", 2); */
+		NetherPlusCore.setBlockHarvestLevel(oreDarkCrystal, "pickaxe", 2);
 	}
 	
-	//Adds blocks
+	//Adds items
 	private void initItems(Configuration cfg) {
 		
 		int blackDiamondRenderID = proxy.registerArmorRenderID("/netherplus/blackdiamond_");
@@ -181,12 +187,11 @@ public class NetherPlus {
 		T_NETHERIDIUM = EnumHelper.addToolMaterial("NETHERIDIUM", 2, 300, 6.0F, 2, 14);
 		T_MOLTEN = EnumHelper.addToolMaterial("MOLTEN", 2, 512, 7.0F, 4, 7);
 		
-		/*crystalDark = new NPItem(NPConfig.crystalDarkID).setIconCoord(0, 0).setItemName("crystalDark");
-		crystalFiery = new NPItem(NPConfig.crystalFieryID).setIconCoord(1, 0).setItemName("crystalFiery");
-		crystalWater = new NPItem(NPConfig.crystalWaterID).setIconCoord(2, 0).setItemName("crystalWater");
-		bookSpellFlame = new NPSpellBook(NPConfig.bookSpellFlameID).setIconCoord(3, 0).setItemName("flameBook");
-		itemMagicStaff = new NPItemStaff(NPConfig.itemMagicStaffID).setIconCoord(4, 0).setItemName("itemMagicStaff");
-		crystalFiery2 = new NPItem(NPConfig.crystalFiery2ID).setIconCoord(5, 0).setItemName("crystalFiery2");*/
+		crystalDark = new ItemTextured(getItemID(cfg, "crystalDark", 5023)).setIconCoord(0, 0).setItemName("crystalDark");
+		crystalFiery = new ItemTextured(getItemID(cfg, "crystalFiery", 5024)).setIconCoord(1, 0).setItemName("crystalFiery");
+		crystalWater = new ItemTextured(getItemID(cfg, "crystalWater", 5025)).setIconCoord(2, 0).setItemName("crystalWater");
+		bookSpellFlame = new SpellBook(getItemID(cfg, "spellBook", 5026)).setIconCoord(3, 0).setItemName("flameBook");
+		itemMagicStaff = new ItemStaff(getItemID(cfg, "magicStaff", 5027)).setIconCoord(4, 0).setItemName("itemMagicStaff");
 		blackDiamond = new ItemTextured(getItemID(cfg, "blackDiamond", 5000)).setIconCoord(6, 0).setItemName("blackDiamond");
 		netherCoal = new ItemTextured(getItemID(cfg, "netherCoal", 5001)).setIconCoord(7, 0).setItemName("netherCoal");
 		ingotNetheridium = new ItemTextured(getItemID(cfg, "ingotNetheridium", 5002)).setIconCoord(8, 0).setItemName("ingotNetheridium");
@@ -214,11 +219,11 @@ public class NetherPlus {
 		bootsBlackDiamond = new ItemArmorTextured(getItemID(cfg, "bootsBlackDiamond", 5022), A_BLACK_DIAMOND, blackDiamondRenderID, 3).setIconCoord(3, 4).setItemName("bootsBlackDiamond");
 		cfg.save();
 		
-		/*NetherPlusCore.addName(crystalDark, "Dark Crystal");
+		NetherPlusCore.addName(crystalDark, "Dark Crystal");
 		NetherPlusCore.addName(crystalFiery, "Fiery Crystal");
 		NetherPlusCore.addName(crystalWater, "Water Crystal");
 		NetherPlusCore.addName(bookSpellFlame, "Flame Spellbook");
-		NetherPlusCore.addName(itemMagicStaff, "Staff");*/
+		NetherPlusCore.addName(itemMagicStaff, "Staff");
 		NetherPlusCore.addName(blackDiamond, "Black Diamond");
 		NetherPlusCore.addName(netherCoal, "Nether Coal");
 		NetherPlusCore.addName(ingotNetheridium, "Netheridium Ingot");
@@ -243,11 +248,11 @@ public class NetherPlus {
 		NetherPlusCore.addName(pantsBlackDiamond, "Black Diamond Leggings");
 		NetherPlusCore.addName(bootsBlackDiamond, "Black Diamond Boots");
 	}
-	/*
+	
 	public void registerEntities() {
-		ModLoader.registerTileEntity(NPTileEntitySynthesizer.class, "Synthesizer");
+		//ModLoader.registerTileEntity(NPTileEntitySynthesizer.class, "Synthesizer");
 	}
-	*/
+	
 	public void initRecipes() {
 		
 		NetherPlusCore.addSmelting(oreNetheridium.blockID, new ItemStack(ingotNetheridium), 1.0F);
