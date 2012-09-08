@@ -8,7 +8,7 @@
     <property name="classes.dir"         value="${build.dir}/classes"/>
     <property name="jar.dir"             value="${build.dir}/dist"/>
     <property name="reobf.dir"           value="reobf"/>
-    <property name="nether.version"      value="0.9.1"/>
+    <property name="nether.version"      value="1.0.0"/>
     
     <echo message="Starting build for NetherPlus"/>
     
